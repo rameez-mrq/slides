@@ -1,40 +1,336 @@
 <!doctype html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>reveal.js</title>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<link rel="stylesheet" href="dist/reset.css">
-		<link rel="stylesheet" href="dist/reveal.css">
-		<link rel="stylesheet" href="dist/theme/black.css">
+	<title>reveal.js</title>
 
-		<!-- Theme used for syntax highlighted code -->
-		<link rel="stylesheet" href="plugin/highlight/monokai.css">
-	</head>
-	<body>
-		<div class="reveal">
-			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2</section>
-			</div>
-		</div>
+	<link rel="stylesheet" href="../dist/reset.css">
+	<link rel="stylesheet" href="../dist/reveal.css">
+	<link rel="stylesheet" href="../dist/theme/black.css">
 
-		<script src="dist/reveal.js"></script>
-		<script src="plugin/notes/notes.js"></script>
-		<script src="plugin/markdown/markdown.js"></script>
-		<script src="plugin/highlight/highlight.js"></script>
-		<script>
-			// More info about initialization & config:
-			// - https://revealjs.com/initialization/
-			// - https://revealjs.com/config/
-			Reveal.initialize({
-				hash: true,
+	<!-- Theme used for syntax highlighted code -->
+	<link rel="stylesheet" href="../plugin/highlight/monokai.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.2.0/chart.min.js"></script>
+	<script src="plugin/chart/plugin.js"></script>
+</head>
 
-				// Learn about plugins: https://revealjs.com/plugins/
-				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
-			});
-		</script>
-	</body>
+<body>
+	<div class="reveal">
+		<div class="slides">
+			<section data-background-color="white" data-transition="fade" data-background-transition="slide">
+
+				<!--  <div class = "r-stack" style="position : absolute; top : 20%;">
+<h2 class ="fragment fade-in-then-out" >Humanising Dialogue Agents</h2>
+<h2 class ="fragment fade-in-then-out">Hey chatbot! why so serious?</h2>
+<h2 data-id = "title" class ="fragment fade-in">Can chatbots exhibit mixed <span class = "fragment highlight-red">attributes?</span></h2>
+</div>
+
+<p style = "position: fixed; bottom: 2em">Rameez Qureshi</p>
+
+<img data-id = "image1" src="media\logos\ADAPT_Logo_CMYK.png" style="position : absolute; bottom : 0; right : 0; width: 150px">
+<img data-id = "image2" src="media\logos\tcd.png" style="position : absolute; bottom : 0; left : 0; width: 150px"> -->
+
+				<h2>Blending Knowledge for blended conversations</h2>
+				14 June 2022
+				<p style="position: fixed;  bottom: 2em">Rameez Qureshi</p>
+
+				<img src="../media\logos\ADAPT_Logo_CMYK.png"
+					style=" position : fixed; bottom :0 ; right : 2em; width: 150px">
+				<img src="../media\logos\tcd.png" style=" position : fixed; bottom :0 ; left : 2em; width: 150px">
+
+			</section>
+
+			<section data-transition="fade">
+				<section data-transition="fade">
+					<h2>Revisit</h1>
+				</section>
+				<section>
+					<!-- <h2 data-id="title" style="position : absolute; top : 40%; font-size : 50px">attributes?</h2> -->
+					<h2>Human Traits</h2>
+					<ul>
+						<li style="margin: 15px 0">Knowledgeable</li>
+						<li style="margin: 15px 0">Empathatic</li>
+						<li style="margin: 15px 0">Engaging</li>
+						<!-- <li class="fragment">And others...</li> -->
+					</ul>
+
+				</section>
+				<section>
+					<table style="font-size : 35px;  border: 1px solid white;">
+						<thead>
+							<tr>
+								<th>Attribute</th>
+								<th>Dataset</th>
+								<th>Published Work</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Knowledge</td>
+								<td>Wikipedia</td>
+								<td>Wizard of Wikipedia: Knowledge-Powered Conversational agents, <em>Dinan et al.</em>
+								</td>
+							</tr>
+							<tr>
+								<td>Empathy</td>
+								<td>Empathetic Dialogues</td>
+								<td>Towards Empathetic Open-domain Conversation Models: a New Benchmark and Dataset ,
+									<em>Rashkin et al.</em>
+								</td>
+							</tr>
+							<tr>
+								<td>Engaging</td>
+								<td>ConvAI2</td>
+								<td> Conversational Intelligence Challenge 2,<em> Dinan et al.</em> </td>
+							</tr>
+						</tbody>
+					</table>
+				</section>
+				<section>
+					<h1>Motivation</h1>
+					<blockquote style="text-align: justify; width: 100%; font-style: normal;">The model should be able
+						to
+						<span class="fragment highlight-red" data-fragment-index="1">showcase multiple attributes</span>
+						in
+						a single reply as per the situation. Therefore, the architecture should be capable of <span
+							class="fragment highlight-blue" data-fragment-index="2">percieving</span> the current
+						intent/emotion of the user and <span class="fragment highlight-blue"
+							data-fragment-index="2">taking
+							action</span> accordingly.
+					</blockquote>
+				</section>
+				<section data-transition="fade">
+					<img src="\pres\figures\7april22\arch_wrl.png" style="max-width: 80%; padding: 0;">
+				</section>
+				<section data-transition="fade">
+					<img src="\pres\figures\9jun22\simplified_arch.png" style="max-width: 85%; padding: 0;">
+				</section>
+			</section>
+			<section>
+				<section>
+					<h2>Current Progress</h2>
+				</section>
+				<section>
+					<h1>Models trained</h1>
+					<br><br>
+					<ul>
+						<li>Wizard of Wikipedia</li>
+						<Li>Empathatic Dialogues</Li>
+						<br>
+						<li>50% Wikipedia - 50% Empathy</li>
+						<li>70% Wikipedia - 30% Empathy</li>
+						<li>30% Wikipedia - 70% Empathy</li>
+
+					</ul>
+				</section>
+				<section>
+					<h1>Datasets</h1>
+					<table>
+						<thead>
+						  <tr>
+							<th>Dataset</th>
+							<th>Avg. Utterance Len.</th>
+							<th>Utterances</th>
+						  </tr>
+						</thead>
+						<tbody>
+						  <tr>
+							<td>Empathetic Dialogues</td>
+							<td>15.850</td>
+							<td>129272</td>
+						  </tr>
+						  <tr>
+							<td>Wizard of Wikipedia</td>
+							<td>18.488</td>
+							<td>90412</td>
+						  </tr>
+						  <tr>
+							<td>Blended Skill Talk</td>
+							<td>11.2</td>
+							<td>27018</td>
+						  </tr>
+						</tbody>
+						</table>
+				</section>
+				<section>
+
+					<h2>Results</h2>
+				</section>
+				<section>
+					<h3 style="color: #fed766;">Blended Skill Talk</h3>
+					<span>A dataset of <span style="color: #fe4a49;">7k conversations</span> explicitly designed to exhibit multiple conversation modes: displaying <span style="color: #2ab7ca;">personality</span>, having <span style="color: #2ab7ca;">empathy</span>, and demonstrating <span style="color: #2ab7ca;">knowledge</span>.
+
+					<!-- <span><span style="color: #fed766;">Wizard of Wikipedia</span>: A dataset with conversations directly grounded with knowledge retrieved from Wikipedia. Contains <span style="color: #fe4a49;">201k utterances</span> from <span style="color: #fe4a49;">22k dialogues</span> spanning over <span style="color: #fe4a49;">1300</span> diverse topics.</span>
+					<br>
+					<br>
+					<span> <span style="color: #fed766;">Empathetic Dialogues </span>: A dataset of <span style="color: #fe4a49;">25k conversations</span> grounded in emotional situations to facilitate training and evaluating dialogue systems.  </span> -->
+				</section>
+
+				<section>
+					<h3>Blended Skill Talk</h3>
+					<div style="width: 70%;max-height:70%">
+						<canvas width="100%" height="600" data-chart="bar">
+							,
+Wikipedia, 298.272
+Empathy, 1046.0393
+50W-50E, 260.474
+70W-30E, 286.493
+30W-70E, 247.56
+<!-- 
+{
+"options": { "scales": { "x": { "stacked": false }, "y": { "max": 500, "display":true, "title": { "display":true, "text":"Perplexity", "font":{"size":15}
+         
+					 }} } }
+}
+
+-->
+						</canvas>
+					</div>
+				</section>
+
+				<section>
+					<h2 style="color: #fed766;"> Empathatic Dialogues </h2>
+					<span>A dataset of <span style="color: #fe4a49;">25k conversations</span> grounded in emotional situations to facilitate training and evaluating dialogue systems.  </span>
+
+				</section>
+				<section>
+					<h3>Empathetic Dialogue</h3>
+					<div style="width: 70%;max-height:70%">
+						<canvas width="100%" height="600" data-chart="bar">
+							,
+Wikipedia, 324.292
+Empathy, 289.539
+50W-50E, 210.801
+70W-30E, 229.939
+30W-70E, 220.1
+<!-- 
+{
+"options": { "scales": { "x": { "stacked": false }, "y": { "max": 500, "display":true, "title": { "display":true, "text":"Perplexity", "font":{"size":15}
+         
+					 }} } }
+}
+
+-->
+						</canvas>
+					</div>
+				</section>
+
+				<section>
+					<h2 style="color: #fed766;">Wizard of Wikipedia</h2>
+					<span>A dataset with conversations directly grounded with knowledge retrieved from Wikipedia. Contains <span style="color: #fe4a49;">201k utterances</span> from <span style="color: #fe4a49;">22k dialogues</span> spanning over <span style="color: #2ab7ca;">1300 diverse topics</span>.</span>
+
+				</section>
+
+				<section>
+					<h3>Wizard of Wikipedia</h3>
+					<div style="width: 70%;max-height:70%">
+						<canvas width="100%" height="600" data-chart="bar">
+							,
+Wikipedia, 186.334
+Empathy, 12568.12
+50W-50E, 2384.09
+70W-30E, 2606.673
+30W-70E,2184.141
+<!-- 
+{
+"options": { "scales": { "x": { "stacked": false }, "y": { "max": 500, "display":true, "title": { "display":true, "text":"Perplexity", "font":{"size":15}
+         
+					 }} } }
+}
+
+-->
+						</canvas>
+					</div>
+				</section>
+
+		</section>
+		<section>
+		<section>
+			<h2>Whats Ahead?</h2>
+		</section>	
+		<section>
+			<style>
+				p{text-align: left;}
+			</style>
+			<p class="fragment fade-in-then-semi-out">Fix the noise due to emapthy model.</p>
+			<p class="fragment fade-in-then-semi-out">Try adding another model, based on ConvAI2 dataset.</p>
+			<p class="fragment ">Examining the perfect weightage of knowledge for different datasets.</p>
+
+		</section>
+		</section>
+		<section>
+		<section data-background-color="#dcedc1">
+			<h2>Thank you!</h2>
+		</section>
+		<section data-background-color="#dcedc1">
+			<h2>References</h2>
+
+<sub>Dinan, Emily, Stephen Roller, Kurt Shuster, Angela Fan, Michael Auli, and Jason Weston. "Wizard of Wikipedia: Knowledge-Powered Conversational Agents." ArXiv:1811.01241 [Cs], February 21, 2019. http://arxiv.org/abs/1811.01241.</sub><br>
+<sub>Rashkin, Hannah, Eric Michael Smith, Margaret Li, and Y.-Lan Boureau. "Towards Empathetic Open-Domain Conversation Models: A New Benchmark and Dataset." ArXiv:1811.00207 [Cs], August 28, 2019. http://arxiv.org/abs/1811.00207.</sub><br>
+<sub>Roller, Stephen, Emily Dinan, Naman Goyal, Da Ju, Mary Williamson, Yinhan Liu, Jing Xu, et al. "Recipes for Building an Open-Domain Chatbot." ArXiv:2004.13637 [Cs], April 30, 2020. http://arxiv.org/abs/2004.13637.</sub><br>
+<sub>Smith, Eric Michael, Mary Williamson, Kurt Shuster, Jason Weston, and Y.-Lan Boureau. "Can You Put It All Together: Evaluating Conversational Agents" Ability to Blend Skills." ArXiv:2004.08449 [Cs], April 17, 2020. http://arxiv.org/abs/2004.08449.</sub>
+		</section>
+	</section>
+	</section>
+	</div>
+	</div>
+
+	<script src="dist/reveal.js"></script>
+	<script src="plugin/notes/notes.js"></script>
+	<script src="plugin/markdown/markdown.js"></script>
+	<script src="plugin/highlight/highlight.js"></script>
+	<script src="plugin/zoom/zoom.js"></script>
+	<!-- <script src="plugin/chart/plugin.js"></script> -->
+	<script>
+		// More info about initialization & config:
+		// - https://revealjs.com/initialization/
+		// - https://revealjs.com/config/
+		Reveal.initialize({
+			controls: true,
+			progress: true,
+			center: true,
+			hash: true,
+			slideNumber: 'h.v',
+			chart: {
+				defaults: {
+					// responsive: true,
+    // maintainAspectRatio: false,
+					color: 'lightgray', // color of labels
+					scale: {
+						
+						// beginAtZero: true,
+						// ticks: { display: true },
+						grid :{display:true, color: "lightgray", borderColor:"lightgray", drawOnChartArea:false }
+						// grid: { color: "lightgray" , drawOnChartArea:true},
+						
+
+						 // color of grid lines
+					},
+					
+				},
+				line: { borderColor: ["rgba(20,220,220,.8)", "rgba(220,120,120,.8)", "rgba(20,120,220,.8)"], "borderDash": [[5, 10], [0, 0]] },
+				bar: { backgroundColor: ["#fe4a49", "#2ab7ca", "#fed766 ", "#dec3c3", "#009688"] },
+				pie: { backgroundColor: [["rgba(0,0,0,.8)", "rgba(220,20,20,.8)", "rgba(20,220,20,.8)", "rgba(220,220,20,.8)", "rgba(20,20,220,.8)"]] },
+				radar: { borderColor: ["rgba(20,220,220,.8)", "rgba(220,120,120,.8)", "rgba(20,120,220,.8)"] },
+			},
+			// width: "70%",
+  			// height: "100%",
+			// Transition style
+			// transition: 'fade', // none/fade/slide/convex/concave/zoom
+
+			// Transition speed
+			// transitionSpeed: 'default',
+			// backgroundTransition: 'slide', // default/fast/slow
+
+			//transition: "none",
+
+			// Learn about plugins: https://revealjs.com/plugins/
+			plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealZoom, RevealChart]
+		});
+	</script>
+</body>
+
 </html>

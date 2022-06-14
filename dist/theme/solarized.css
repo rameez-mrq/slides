@@ -118,6 +118,7 @@ html * {
 .reveal p {
   margin: var(--r-block-margin) 0;
   line-height: 1.3;
+  text-align: left;
 }
 
 /* Remove trailing margins after titles */
@@ -177,6 +178,7 @@ html * {
 .reveal ol ul {
   display: block;
   margin-left: 40px;
+  margin-bottom: 25px;
 }
 
 .reveal dt {

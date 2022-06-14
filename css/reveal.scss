@@ -1817,6 +1817,34 @@ $notesWidthPercent: 25%;
 	visibility: hidden;
 }
 
+/*********************************************
+ * For Fixed Header
+ *********************************************/
+ .reveal.slide .slides > section, .reveal.slide .slides > section > section {
+	min-height: 100% !important;
+	display: flex !important;
+	flex-direction: column !important;
+	justify-content: center !important;
+	position: absolute !important;
+	top: 0 !important;
+	align-items: center !important;
+  }
+  section > h1 {
+	position: absolute !important;
+	top: 0 !important;
+	margin-left: auto !important;
+	margin-right: auto !important;
+	left: 0 !important;
+	right: 0 !important;
+	text-align: center !important;
+	// font-size: 1.5em !important;
+  }
+  .print-pdf .reveal.slide .slides > section, .print-pdf .reveal.slide .slides > section > section {
+	min-height: 770px !important;
+	position: relative !important;
+  }
+
+  .reveal .slides > section > section { text-align:left; }
 
 /*********************************************
  * PRINT STYLES
