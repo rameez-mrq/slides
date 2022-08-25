@@ -1,0 +1,101 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  width: 100%;
+  min-height: 100vh;
+  font-size: 1rem;
+  display: flex;
+  background: #f2f2f2;
+  color: #242424;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.box {
+  width: 95%;
+  max-width: 360px;
+  min-height: 100px;
+  font-size: 13.2px;
+  font-family: Poppins, sans-serif;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.12);
+  margin: 4px 8px;
+  cursor: pointer;
+}
+
+.box-icon-ctn {
+  width: 70px;
+  height: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  /* background-color: beige; */
+  padding: 10px 5px;
+}
+
+.box-icon-box {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(rgb(149, 0, 235), rgb(79, 40, 255));
+  color: #fff;
+  border-radius: 100vh;
+}
+
+.box-text-ctn {
+  width: 100%;
+  height: 100%;
+  padding: 10px 5px 10px 0;
+}
+
+.box-heading {
+  font-family: Rubik, sans-serif;
+  text-align: start;
+  margin-bottom: 4px;
+  color: #474747;
+}
+
+.box-link {
+  position: relative;
+  display: inline-block;
+  text-decoration: none;
+  background-image: linear-gradient(rgb(149, 0, 235), rgb(79, 40, 255));
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  background-position: 80%;
+  margin-top: 2px;
+  border-radius: 4px;
+}
+
+.box-link::before {
+  position: absolute;
+  content: "";
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1.6px;
+  background: linear-gradient(rgb(149, 0, 235), rgb(79, 40, 255));
+  border-radius: 100vh;
+  transition: 300ms;
+}
+
+.box:hover .box-link::before {
+  width: 100%;
+}
+
