@@ -1,0 +1,186 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>reveal.js</title>
+
+    <link rel="stylesheet" href="../dist/reset.css">
+    <link rel="stylesheet" href="../dist/reveal.css">
+    <link rel="stylesheet" href="../dist/theme/black.css">
+
+    <!-- Theme used for syntax highlighted code -->
+    <link rel="stylesheet" href="../plugin/highlight/atom.css">
+</head>
+
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <section data-background-color="white">
+
+
+
+                <h2>Blending Knowledge for blended conversations</h2>
+
+                <img data-src="../media\logos\ADAPT_Logo_CMYK.png"
+                    style=" position : fixed; bottom :0 ; right : 0; width: 150px">
+                <img data-src="../media\logos\tcd.png" style=" position : fixed; bottom :0 ; left : 0; width: 150px">
+            </section>
+
+
+            <section>
+                <h2 data-id="title" style="position : absolute; top : 40%; font-size : 50px">Contents </h2>
+
+                <ul>
+                    <li style="margin: 15px 0">Recap</li>
+                    <li style="margin: 15px 0">Outline of ParlAI</li>
+                    <li style="margin: 15px 0">Problem Statement</li>
+                    <li style="margin: 15px 0">Codebase</li>
+                    <!-- <li class="fragment">And others...</li> -->
+                </ul>
+
+            </section>
+            <section data-transition="fade">
+                <img src="..\pres\figures\9jun22\simplified_arch.png" style="max-width: 85%; padding: 0;">
+            </section>
+
+            <section data-background-iframe="https://parl.ai" data-background-interactive>
+                <div style="position: absolute; width: 40%; bottom: 0; right: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.5), 0 5px 25px rgba(0,0,0,0.2); background-color: rgba(0, 0, 0, 0.9); color: #fff; padding: 20px; font-size: 20px; text-align: left; margin-bottom: 0%; margin-right: 0em;">
+                    <h2>ParlAI Framework</h2>
+                    <p>As all the SOTA dialogue models follow ParlAI strucuture, therefore the proposed model has to be written with ParlAI subclasses.</p>
+                </div>
+            </section>
+            <section>
+                <img src="../media/figures/26aug22/parlai_world.png" style="max-width: 65%; padding: 0;">
+            </section>
+
+            <section>
+                <img src="../media/figures/26aug22/pipeline.png">
+            </section>
+
+
+
+
+            <section>
+                <img src="../media/figures/26aug22/Example.png">
+            </section>
+
+            <section>
+                <img src="../media/figures/26aug22/hierarchy.png" style="max-width: 55%; padding: 0;">
+            </section>
+
+            <section data-transition="zoom" data-background-color="#ff8f8f" data-background-transition = "zoom">
+                <link rel="stylesheet" href="plugin/highlight/monokai.css">
+                <pre>
+                    <code data-line-numbers="2-2|3-8|11-25|27-33|46-46">
+    def forward(self, input, encoder_state, incr_state=None):
+
+        for name, param in pretrained_agent.model.named_parameters():
+            param.requires_grad = False
+       
+        for name, param in pretrained_agent_2.model.named_parameters():
+            param.requires_grad = False
+
+
+        '''
+        Insert the two decoders here.
+        '''
+
+        decoder_one = pretrained_agent.model.decoder(input, encoder_state)
+        decoded_first = decoder_one[0] * wiki_factor
+
+        decoder_two = pretrained_agent_2.model.decoder(input, encoder_state)
+        decoded_second = decoder_two[0] * emp_factor
+
+        decoded_merged = decoded_first.add(decoded_second)
+        
+        '''
+        END of custom decoders
+        '''
+
+        ''' 
+        Write blocks here
+        '''
+        hidden_states = self.blocks(decoded_merged)
+        '''
+        End of blocks
+        '''
+
+        if incr_state == None:
+
+            output = hidden_states[:, -input.size(1) :]
+
+            lengths = (input != self.NULL_IDX).sum(dim=-1)
+            for i in range(input.size(0)):
+                output[i, input.size(1) - lengths[i]] = output[i, 0]
+
+        else:
+            output = hidden_states
+
+        return output, None
+                    </code>
+                </pre>
+            </section>
+
+            <section data-background-color="white">
+                <figure>
+                <img src="../media/figures/26aug22/gpt-2.gif" style="max-width: 90%; padding: 0;">
+                <figcaption style="font-size: 0.4cm;">Source: <a href="https://jalammar.github.io/illustrated-gpt2/">Jay Alammar's Blog</a></figcaption>
+                </figure>
+            </section>
+
+
+            <section>
+                <img src="../media/figures/26aug22/Example.png">
+            </section>
+
+            <section data-background-color="#dcedc1">
+                <h2>Thank you!</h2>
+            </section>
+            <section data-background-color="#dcedc1">
+                <h2>References</h2>
+    
+<sub>Dinan, Emily, Stephen Roller, Kurt Shuster, Angela Fan, Michael Auli, and Jason Weston. "Wizard of Wikipedia: Knowledge-Powered Conversational Agents." ArXiv:1811.01241 [Cs], February 21, 2019. http://arxiv.org/abs/1811.01241.</sub><br>
+    
+<sub>Rashkin, Hannah, Eric Michael Smith, Margaret Li, and Y.-Lan Boureau. "Towards Empathetic Open-Domain Conversation Models: A New Benchmark and Dataset." ArXiv:1811.00207 [Cs], August 28, 2019. http://arxiv.org/abs/1811.00207.</sub><br>
+    
+<sub>Roller, Stephen, Emily Dinan, Naman Goyal, Da Ju, Mary Williamson, Yinhan Liu, Jing Xu, et al. "Recipes for Building an Open-Domain Chatbot." ArXiv:2004.13637 [Cs], April 30, 2020. http://arxiv.org/abs/2004.13637.</sub><br>
+    
+<sub>Smith, Eric Michael, Mary Williamson, Kurt Shuster, Jason Weston, and Y.-Lan Boureau. "Can You Put It All Together: Evaluating Conversational Agents" Ability to Blend Skills." ArXiv:2004.08449 [Cs], April 17, 2020. http://arxiv.org/abs/2004.08449.</sub>
+            </section>
+            
+        </div>
+    </div>
+
+    <script src="../dist/reveal.js"></script>
+    <script src="../plugin/notes/notes.js"></script>
+    <script src="../plugin/markdown/markdown.js"></script>
+    <script src="../plugin/highlight/highlight.js"></script>
+    <script src="../plugin/zoom/zoom.js"></script>
+    <script>
+        // More info about initialization & config:
+        // - https://revealjs.com/initialization/
+        // - https://revealjs.com/config/
+        Reveal.initialize({
+            controls: true,
+            progress: true,
+            center: true,
+            hash: true,
+            // Transition style
+            transition: 'fade', // none/fade/slide/convex/concave/zoom
+
+            // Transition speed
+            // transitionSpeed: 'default',
+            backgroundTransition: 'slide', // default/fast/slow
+
+            //transition: "none",
+
+            // Learn about plugins: https://revealjs.com/plugins/
+            plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealZoom]
+        });
+    </script>
+</body>
+
+</html>
