@@ -1,0 +1,106 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>reveal.js</title>
+
+    <link rel="stylesheet" href="../dist/reset.css">
+    <link rel="stylesheet" href="../dist/reveal.css">
+    <link rel="stylesheet" href="../dist/theme/black.css">
+
+    <!-- Theme used for syntax highlighted code -->
+    <link rel="stylesheet" href="../plugin/highlight/monokai.css">
+</head>
+
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <section data-background-color="white">
+
+
+
+                <h2>Blending Knowledge for blended conversations</h2>
+
+                <img data-src="../media\logos\ADAPT_Logo_CMYK.png"
+                    style=" position : fixed; bottom :0 ; right : 0; width: 150px">
+                <img data-src="../media\logos\tcd.png" style=" position : fixed; bottom :0 ; left : 0; width: 150px">
+            </section>
+
+
+            <section>
+                <!-- <h2 data-id="title" style="position : absolute; top : 40%; font-size : 50px">attributes?</h2> -->
+
+                <ul>
+                    <li style="margin: 15px 0">Knowledgeable</li>
+                    <li style="margin: 15px 0">Empathatic</li>
+                    <li style="margin: 15px 0">Engaging</li>
+                    <!-- <li class="fragment">And others...</li> -->
+                </ul>
+
+            </section>
+            <section>
+                <table style="font-size : 35px;  border: 1px solid white;">
+                    <thead>
+                        <tr>
+                            <th>Attribute</th>
+                            <th>Dataset</th>
+                            <th>Published Work</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Knowledge</td>
+                            <td>Wikipedia</td>
+                            <td>Wizard of Wikipedia: Knowledge-Powered Conversational agents, <em>Dinan et al.</em></td>
+                        </tr>
+                        <tr>
+                            <td>Empathy</td>
+                            <td>Empathetic Dialogues</td>
+                            <td>Towards Empathetic Open-domain Conversation Models: a New Benchmark and Dataset ,
+                                <em>Rashkin et al.</em>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Engaging</td>
+                            <td>ConvAI2</td>
+                            <td> Conversational Intelligence Challenge 2,<em> Dinan et al.</em> </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+        </div>
+    </div>
+
+    <script src="../dist/reveal.js"></script>
+    <script src="../plugin/notes/notes.js"></script>
+    <script src="../plugin/markdown/markdown.js"></script>
+    <script src="../plugin/highlight/highlight.js"></script>
+    <script src="../plugin/zoom/zoom.js"></script>
+    <script>
+        // More info about initialization & config:
+        // - https://revealjs.com/initialization/
+        // - https://revealjs.com/config/
+        Reveal.initialize({
+            controls: true,
+            progress: true,
+            center: true,
+            hash: true,
+            // Transition style
+            transition: 'fade', // none/fade/slide/convex/concave/zoom
+
+            // Transition speed
+            // transitionSpeed: 'default',
+            backgroundTransition: 'slide', // default/fast/slow
+
+            //transition: "none",
+
+            // Learn about plugins: https://revealjs.com/plugins/
+            plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealZoom]
+        });
+    </script>
+</body>
+
+</html>
