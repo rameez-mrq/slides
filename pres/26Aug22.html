@@ -23,8 +23,8 @@
 
 
                 <h2>Blending Knowledge for blended conversations</h2>
-                <p style="text-align: center; font-size: small;">26 August 2022</p>
-				<p style="text-align: center;">Rameez Qureshi</p>
+                <p style="text-align: center; font-size: small;">1st September 2022</p>
+                <p style="text-align: center;">Rameez Qureshi</p>
 
                 <img data-src="../media\logos\ADAPT_Logo_CMYK.png"
                     style=" position : fixed; bottom :0 ; right : 0; width: 150px">
@@ -40,18 +40,25 @@
                     <li style="margin: 15px 0">Outline of ParlAI</li>
                     <li style="margin: 15px 0">Problem Statement</li>
                     <li style="margin: 15px 0">Codebase</li>
+                    <li style="margin: 15px 0">Current Status</li>
                     <!-- <li class="fragment">And others...</li> -->
                 </ul>
 
+            </section>
+
+            <section data-transition="fade">
+                <img src="../pres/figures/7april22/arch_wrl.png" style="max-width: 85%; padding: 0;">
             </section>
             <section data-transition="fade">
                 <img src="../media/figures/26aug22/archi.png" style="max-width: 85%; padding: 0;">
             </section>
 
             <section data-background-iframe="https://parl.ai" data-background-interactive>
-                <div style="position: absolute; width: 40%; bottom: 0; right: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.5), 0 5px 25px rgba(0,0,0,0.2); background-color: rgba(0, 0, 0, 0.9); color: #fff; padding: 20px; font-size: 20px; text-align: left; margin-bottom: 0%; margin-right: 0em;">
+                <div
+                    style="position: absolute; width: 40%; bottom: 0; right: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.5), 0 5px 25px rgba(0,0,0,0.2); background-color: rgba(0, 0, 0, 0.9); color: #fff; padding: 20px; font-size: 20px; text-align: left; margin-bottom: 0%; margin-right: 0em;">
                     <h2>ParlAI Framework</h2>
-                    <p>As all the SOTA dialogue models follow ParlAI strucuture, therefore the proposed model has to be written with ParlAI subclasses.</p>
+                    <p>As all the SOTA dialogue models follow ParlAI strucuture, therefore the proposed model has to be
+                        written with ParlAI subclasses.</p>
                 </div>
             </section>
             <section>
@@ -75,18 +82,47 @@
                 <img src="../media/figures/26aug22/hierarchy.png" style="max-width: 55%; padding: 0;">
             </section>
 
-            <section data-transition="zoom" data-background-color="#ff8f8f" data-background-transition = "zoom">
+            <section data-transition="zoom" data-background-color="#ff8f8f" data-background-transition="zoom">
                 <link rel="stylesheet" href="plugin/highlight/monokai.css">
-                <pre>
-                    <code data-line-numbers="2-2|3-8|11-25|27-33|46-46">
+                <pre class="stretch">
+                    <code  data-line-numbers="2-2|4-38|40-54|56-62|64-75">
     def forward(self, input, encoder_state, incr_state=None):
 
-        for name, param in pretrained_agent.model.named_parameters():
-            param.requires_grad = False
-       
-        for name, param in pretrained_agent_2.model.named_parameters():
-            param.requires_grad = False
+    attention_mask = None
+    position_ids = None
+    if incr_state is None:
+        # first step
+        if (
+            not self.add_start_token
+            and input.size(1) == 1
+            and int(input[0][0]) == self.START_IDX
+        ):
+            # generating: ignore the start token
+            # without deep copy, the padding_idx (-1) in encoder_state can be reset to 0 with clamp_ inplace operation
+            model_input = encoder_state.clone()
+        else:
+            # forced decoding: concatenate the context
+            # with the labels
+            model_input = torch.cat([encoder_state, input], dim=-1)
+        attention_mask = model_input != self.NULL_IDX
+        position_ids = (
+            attention_mask.cumsum(dim=-1, dtype=torch.int64) - 1
+        ).clamp_(min=0)
+    else:
+        if not self.add_start_token:
+            input = input[:, 1:]
+        # generating with continuation
+        # get the position ids
+        position_ids = (encoder_state != self.NULL_IDX).sum(
+            -1, True, dtype=torch.int64
+        ) - 1
+        delta = ((input != self.NULL_IDX)).sum(-1, True, dtype=torch.int64)
+        position_ids += delta
+        # generation: get the last token input
+        model_input = input[:, -1:]
+        attention_mask = torch.cat([encoder_state, input], dim=-1) != self.NULL_IDX
 
+    model_input = model_input.clamp_(min=0)
 
         '''
         Insert the two decoders here.
@@ -130,8 +166,9 @@
 
             <section data-background-color="white">
                 <figure>
-                <img src="../media/figures/26aug22/gpt-2.gif" style="max-width: 90%; padding: 0;">
-                <figcaption style="font-size: 0.4cm;">Source: <a href="https://jalammar.github.io/illustrated-gpt2/">Jay Alammar's Blog</a></figcaption>
+                    <img src="../media/figures/26aug22/gpt-2.gif" style="max-width: 90%; padding: 0;">
+                    <figcaption style="font-size: 0.4cm;">Source: <a
+                            href="https://jalammar.github.io/illustrated-gpt2/">Jay Alammar's Blog</a></figcaption>
                 </figure>
             </section>
 
@@ -140,21 +177,120 @@
                 <img src="../media/figures/26aug22/Example.png">
             </section>
 
+
+            <section data-background-color="#fe4a49">
+                <h2>Well, it finally worked!</h2>
+            </section>
+
+            <section>
+                <section style="text-align: left;">
+                    <h2>Persona</h2>
+                    <br><br>
+                    I work as an electrician. I always sleep 8 hours a day.
+                    <br><br>
+                    Electrician.<br>
+                    That sounds dangerous. Is it worth doing such a dangerous job?<br>
+                    Well it is okay if you are well trained. There are three levels: Apprentice, journeyman and Master.
+                </section>
+                <section>
+                    <h3>Which level are you at?</h3><br><br>
+                    <text style="color:#FFB600">WIKI: I am a journeyman. I am a certified electrician. I am a certified apprentice. I am a certified apprentice.</text><br><br>
+                    <text style="color:#FF4921">EMP: I am Master. I am a journeyman.</text>
+                </section>
+
+                <section>
+                    <h3>Thats great! How long have you been doing this work?</h3><br><br>
+                    <text style="color:#FFB600">WIKI: I have been working as an apprentice for about 10 years now.</text><br><br>
+                    <text style="color:#FF4921">EMP: I started in August</text>
+                </section>
+
+                <section>
+                    <h3>Sounds like it could be a dangerous job at times.</h3><br><br>
+                    <text style="color:#FFB600">WIKI: It is dangerous. I am a certified electrician and I am a certified electrician.</text><br><br>
+                    <text style="color:#FF4921">EMP: It is. I am very careful with my safety.</text>
+                </section>
+
+                <section>
+                    <h3>Well you have entered a trade that will always guarantee you some work.</h3><br><br>
+                    <text style="color:#FFB600">WIKI: I am a certified electrician, so i know a lot about electrical systems.</text><br><br>
+                    <text style="color:#FF4921">EMP: I agree. I am going to do my best to stay on top of it.</text>
+                </section>
+
+                <section>
+                    <h3>I have a pretty stable job myself, but mostly desk work</h3><br><br>
+                    <text style="color:#FFB600">WIKI: Do you work in a building or a building?</text><br><br>
+                    <text style="color:#FF4921">EMP: I am sure you will be fine.</text>
+                </section>
+
+                <section>
+                    <h3>I really do but sometimes I would like to be active and on my feet more.</h3><br><br>
+                    <text style="color:#FFB600">WIKI: Do you have a favorite hobby?</text><br><br>
+                    <text style="color:#FF4921">EMP: I am glad you have a job that allows you to do that.</text>
+                </section>
+
+                <section>
+                    <h2>Merger Models</h2>
+                    <ol>
+                        <li style="margin: 35px 0; color:#fe4a49; font-size:40px">80% Wiki - 20% Empathy  [W]</li>
+                        <li style="margin: 35px 0; color:#2ab7ca; font-size:40px">20% Wiki - 80% Empathy  [E]</li>
+                        <li style="margin: 35px 0; color:#fed766; font-size:40px">50% Wiki - 50% Empathy  [B]</li>
+                        <!-- <li class="fragment">And others...</li> -->
+                    </ol>
+                </section>
+
+                <section data-auto-animate>
+                    <h3>I really do but sometimes I would like to be active and on my feet more.</h3><br><br>
+                    WIKI: Do you have a favorite hobby?<br><br>
+                    EMP: I am glad you have a job that allows you to do that.<br><br><br><br>
+                    <div data-id = "example">
+                        <text style="color:#fe4a49">?: That's great. I'm sure you'll do great!</text><br><br>
+                        <text style="color:#2ab7ca">?: I do, but I also enjoy being a physical person.</text><br><br>
+                        <text style="color:#fed766">?: That's a good attitude to have.</text>
+                </div>
+
+                </section>
+
+
+                <section  data-auto-animate>
+                    <div data-id = "example">
+                        
+                        <text style="color:#fe4a49; font-size:40px">W: That's great. I'm sure you'll do great!</text><br><br>
+                        <text style="color:#2ab7ca ; font-size:40px">E: I do, but I also enjoy being a physical person.</text><br><br>
+                        <text style="color:#fed766 ; font-size:40px">B: That's a good attitude to have.</text>
+                    </div>
+                </section>
+
+            </section>
+            <section data-background-color="#dcedc1">
+                <img src="../media/figures/26aug22/example_1.png" style="max-width: 80%; padding: 0;">
+            </section>
+            <section data-background-color="#dcedc1">
+                <img src="../media/figures/26aug22/example_2.png">
+            </section>
+
             <section data-background-color="#dcedc1">
                 <h2>Thank you!</h2>
             </section>
-            <section data-background-color="#dcedc1">
+            <section data-background-color="#dcedc1" style="text-align: left; font-size:25px">
                 <h2>References</h2>
-    
-<sub>Dinan, Emily, Stephen Roller, Kurt Shuster, Angela Fan, Michael Auli, and Jason Weston. "Wizard of Wikipedia: Knowledge-Powered Conversational Agents." ArXiv:1811.01241 [Cs], February 21, 2019. http://arxiv.org/abs/1811.01241.</sub><br>
-    
-<sub>Rashkin, Hannah, Eric Michael Smith, Margaret Li, and Y.-Lan Boureau. "Towards Empathetic Open-Domain Conversation Models: A New Benchmark and Dataset." ArXiv:1811.00207 [Cs], August 28, 2019. http://arxiv.org/abs/1811.00207.</sub><br>
-    
-<sub>Roller, Stephen, Emily Dinan, Naman Goyal, Da Ju, Mary Williamson, Yinhan Liu, Jing Xu, et al. "Recipes for Building an Open-Domain Chatbot." ArXiv:2004.13637 [Cs], April 30, 2020. http://arxiv.org/abs/2004.13637.</sub><br>
-    
-<sub>Smith, Eric Michael, Mary Williamson, Kurt Shuster, Jason Weston, and Y.-Lan Boureau. "Can You Put It All Together: Evaluating Conversational Agents" Ability to Blend Skills." ArXiv:2004.08449 [Cs], April 17, 2020. http://arxiv.org/abs/2004.08449.</sub>
+
+                <sub>Dinan, Emily, Stephen Roller, Kurt Shuster, Angela Fan, Michael Auli, and Jason Weston. "Wizard of
+                    Wikipedia: Knowledge-Powered Conversational Agents." ArXiv:1811.01241 [Cs], February 21, 2019.
+                    http://arxiv.org/abs/1811.01241.</sub><br><br>
+
+                <sub>Rashkin, Hannah, Eric Michael Smith, Margaret Li, and Y.-Lan Boureau. "Towards Empathetic
+                    Open-Domain Conversation Models: A New Benchmark and Dataset." ArXiv:1811.00207 [Cs], August 28,
+                    2019. http://arxiv.org/abs/1811.00207.</sub><br><br>
+
+                <sub>Roller, Stephen, Emily Dinan, Naman Goyal, Da Ju, Mary Williamson, Yinhan Liu, Jing Xu, et al.
+                    "Recipes for Building an Open-Domain Chatbot." ArXiv:2004.13637 [Cs], April 30, 2020.
+                    http://arxiv.org/abs/2004.13637.</sub><br><br>
+
+                <sub>Smith, Eric Michael, Mary Williamson, Kurt Shuster, Jason Weston, and Y.-Lan Boureau. "Can You Put
+                    It All Together: Evaluating Conversational Agents" Ability to Blend Skills." ArXiv:2004.08449 [Cs],
+                    April 17, 2020. http://arxiv.org/abs/2004.08449.</sub>
             </section>
-            
+
         </div>
     </div>
 
