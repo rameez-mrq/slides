@@ -1,0 +1,121 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>reveal.js</title>
+
+    <link rel="stylesheet" href="../dist/reset.css">
+    <link rel="stylesheet" href="../dist/reveal.css">
+    <link rel="stylesheet" href="../dist/theme/black.css">
+
+    <!-- Theme used for syntax highlighted code -->
+    <link rel="stylesheet" href="../plugin/highlight/dark.css">
+</head>
+
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <section data-background-color="white">
+
+
+
+                <h1> CS7IS3<br>First Assignment</h1><br><br><br><br>
+                <p style="text-align: center; font-size:medium;">21st September 2022</p>
+                <p style="text-align: center; font-size:x-small">moquresh@tcd.ie</p>
+
+                <!-- <img data-src="../media\logos\ADAPT_Logo_CMYK.png"
+                    style=" position : fixed; bottom :0 ; right : 0; width: 150px">
+                <img data-src="../media\logos\tcd.png" style=" position : fixed; bottom :0 ; left : 0; width: 150px"> -->
+
+                <img data-src="../media\logos\tcd.png" style=" width: 150px">
+            </section>
+
+
+            <section>
+                <!-- <h2 data-id="title" style="position : absolute; top : 40%; font-size : 50px">Contents </h2> -->
+                <h2>Assignment 1</h2>
+                <ul>
+                    <li style="margin: 15px 0">Install Apache Lucene.</li>
+                    <li style="margin: 15px 0">Download Cranfield Dataset.</li>
+                    <li style="margin: 15px 0">Implement a retrieval system based on Lucene:</li>
+                    <ul>
+                        <li style="margin: 15px 0"> Index dataset (preprocessing, choice of analysers)</li>
+                            <li style="margin: 15px 0">Process query</li>
+                            <li style="margin: 15px 0">Execute search (choice of scoring functions)</li>
+                    </ul>
+                    <li style="margin: 15px 0">Evaluate the system using <code>trec_eval</code></li>
+                    <ul>
+                        <li style="margin: 15px 0"> Run evaluation
+                    </ul>
+                    <!-- <li class="fragment">And others...</li> -->
+                </ul>
+
+            </section>
+
+            <section style="text-align:justify;">
+                <h2 >Cranfield</h2><br><br>
+                The <strong>Cranfield experiments </strong>were a series of experimental studies in information retrieval, to evaluate the efficiency of indexing systems. The dataset is available here. 
+                <br><br><br>
+                <ul>
+                    <li style="margin: 15px 0">1400 Documents</li>
+                    <li style="margin: 15px 0">225 queries</li>
+                    <li style="margin: 15px 0">Relevance file</li>
+                </ul>
+            </section>
+
+            <section style="text-align:justify;">
+                <h2><code>trec_eval</code></h2>
+                <br>
+                <code>trec_eval</code> is the standard tool used by the TREC community for evaluating retrieval system, given the results file and a standard set of judged results.
+
+                <br><br><br>
+                <ul>
+                    <li style="margin: 15px 0">Installation</li>
+                    <ul>
+                        <li style="margin: 15px 0">Build from <a href="https://github.com/usnistgov/trec_eval/blob/master/README">source</a>.</li>
+                    </ul>
+                    <li style="margin: 15px 0">Usage: <pre style="width: 100%;">
+                        <code>trec_eval -m measure[.params] rel_info_file results_file</code>
+                    </pre></li>
+                    <li style="margin: 15px 0">Format result file (<a href="http://www.rafaelglater.com/en/post/learn-how-to-use-trec_eval-to-evaluate-your-information-retrieval-system">ref</a>)</li>
+                </ul>
+
+            </section>
+
+        </div>
+    </div>
+
+    <script src="../dist/reveal.js"></script>
+    <script src="../plugin/notes/notes.js"></script>
+    <script src="../plugin/markdown/markdown.js"></script>
+    <script src="../plugin/highlight/highlight.js"></script>
+    <script src="../plugin/zoom/zoom.js"></script>
+    <script>
+        // More info about initialization & config:
+        // - https://revealjs.com/initialization/
+        // - https://revealjs.com/config/
+        Reveal.initialize({
+            slideNumber: true,
+            controls: true,
+            progress: true,
+            center: true,
+            hash: true,
+            // Transition style
+            transition: 'fade', // none/fade/slide/convex/concave/zoom
+
+            // Transition speed
+            // transitionSpeed: 'default',
+            backgroundTransition: 'slide', // default/fast/slow
+
+            //transition: "none",
+
+            // Learn about plugins: https://revealjs.com/plugins/
+            plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealZoom]
+        });
+    </script>
+</body>
+
+</html>
