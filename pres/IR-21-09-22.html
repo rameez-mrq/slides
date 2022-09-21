@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="../dist/theme/black.css">
 
     <!-- Theme used for syntax highlighted code -->
-    <link rel="stylesheet" href="../plugin/highlight/dark.css">
+    <link rel="stylesheet" href="../plugin/highlight/atom.css">
 </head>
 
 <body>
@@ -57,7 +57,7 @@
 
             <section style="text-align:justify;">
                 <h2 >Cranfield</h2><br><br>
-                The <strong>Cranfield experiments </strong>were a series of experimental studies in information retrieval, to evaluate the efficiency of indexing systems. The dataset is available here. 
+                The <strong>Cranfield experiments </strong>were a series of experimental studied in information retrieval, to evaluate the efficiency of indexing systems. The dataset is available here. 
                 <br><br><br>
                 <ul>
                     <li style="margin: 15px 0">1400 Documents</li>
@@ -78,11 +78,31 @@
                         <li style="margin: 15px 0">Build from <a href="https://github.com/usnistgov/trec_eval/blob/master/README">source</a>.</li>
                     </ul>
                     <li style="margin: 15px 0">Usage: <pre style="width: 100%;">
-                        <code>trec_eval -m measure[.params] rel_info_file results_file</code>
+                        <code class="text">trec_eval -m measure[.params] rel_info_file results_file</code>
                     </pre></li>
                     <li style="margin: 15px 0">Format result file (<a href="http://www.rafaelglater.com/en/post/learn-how-to-use-trec_eval-to-evaluate-your-information-retrieval-system">ref</a>)</li>
                 </ul>
 
+            </section>
+
+            <section>
+                <pre style="width: 100%;">
+                    <code class='bash' data-line-numbers>cd your_project
+mkdir cran && cd $_
+wget http://ir.dcs.gla.ac.uk/resources/test_collections/cran/cran.tar.gz
+tar -xf cran.tar.gz
+cd ..
+mvn package
+java -jar target/your_snapshot.jar
+cd trec_eval
+make #if not done before
+./trec_eval [-q] [-m measure] qrel_file results_file
+                    </code>
+                </pre>
+            </section>
+
+            <section data-background-color="#dcedc1">
+                <h2>Questions?</h2>
             </section>
 
         </div>
