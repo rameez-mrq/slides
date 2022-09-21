@@ -88,12 +88,22 @@
             <section>
                 <pre style="width: 100%;">
                     <code class='bash' data-line-numbers>cd your_project
+
+#Download Cranfield Dataset
+
 mkdir cran && cd $_
 wget http://ir.dcs.gla.ac.uk/resources/test_collections/cran/cran.tar.gz
 tar -xf cran.tar.gz
 cd ..
+
+#Compile your script
+
 mvn package
 java -jar target/your_snapshot.jar
+
+#Download Trec_eval and evaluate model
+
+git clone https://github.com/usnistgov/trec_eval.git
 cd trec_eval
 make #if not done before
 ./trec_eval [-q] [-m measure] qrel_file results_file
