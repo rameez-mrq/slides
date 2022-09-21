@@ -5,11 +5,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <title>reveal.js</title>
+    <title>Lucene Demo</title>
 
     <link rel="stylesheet" href="../dist/reset.css">
     <link rel="stylesheet" href="../dist/reveal.css">
     <link rel="stylesheet" href="../dist/theme/black.css">
+    <link rel="stylesheet" href="../plugin/reveal-run-in-terminal.css" />
 
     <!-- Theme used for syntax highlighted code -->
     <link rel="stylesheet" href="../plugin/highlight/atom.css">
@@ -25,6 +26,8 @@
                 <h1> CS7IS3<br>First Assignment</h1><br><br><br><br>
                 <p style="text-align: center; font-size:medium;">21st September 2022</p>
                 <p style="text-align: center; font-size:x-small">moquresh@tcd.ie</p>
+                <br>
+                <p style="text-align: center; font-size:small">shorturl.at/nSTVZ</p>
 
                 <!-- <img data-src="../media\logos\ADAPT_Logo_CMYK.png"
                     style=" position : fixed; bottom :0 ; right : 0; width: 150px">
@@ -101,11 +104,13 @@ cd ..
 mvn package
 java -jar target/your_snapshot.jar
 
-#Download Trec_eval and evaluate model
+#Download Trec_eval
 
 git clone https://github.com/usnistgov/trec_eval.git
 cd trec_eval
 make #if not done before
+
+#Evaluate model
 ./trec_eval [-q] [-m measure] qrel_file results_file
                     </code>
                 </pre>
@@ -143,9 +148,22 @@ make #if not done before
             //transition: "none",
 
             // Learn about plugins: https://revealjs.com/plugins/
-            plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealZoom]
+            plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealZoom],
+
+            dependencies: [
+    {
+      src: '../plugin/reveal-run-in-terminal.js',
+      callback: function() {
+        RunInTerminal.init();
+      },
+      async: true,
+    },
+    // more plugins
+  ],
+
         });
     </script>
+
 </body>
 
 </html>
