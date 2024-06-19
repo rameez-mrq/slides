@@ -1,0 +1,538 @@
+<!doctype html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<title>slides</title>
+
+	<link rel="stylesheet" href="../dist/reset.css">
+	<link rel="stylesheet" href="../dist/reveal.css">
+	<link rel="stylesheet" href="../dist/theme/night.css">
+
+	<!-- Theme used for syntax highlighted code -->
+	<link rel="stylesheet" href="../plugin/highlight/monokai.css">
+	<style>
+		.reveal pre {
+			text-align: left;
+			/* display: flex; */
+			justify-content: left;
+		}
+	</style>
+	<!-- Chart plugin -->
+	<script src="https://cdn.jsdelivr.net/npm/reveal.js-plugins@latest/chart/plugin.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.3.1/chart.min.js"></script>
+	<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js"></script> -->
+</head>
+
+<body>
+	<div class="reveal">
+		<div class="slides">
+			<section data-background-color="white" data-transition="fade" data-background-transition="slide">
+
+				<!--  <div class = "r-stack" style="position : absolute; top : 20%;">
+<h2 class ="fragment fade-in-then-out" >Humanising Dialogue Agents</h2>
+<h2 class ="fragment fade-in-then-out">Hey chatbot! why so serious?</h2>
+<h2 data-id = "title" class ="fragment fade-in">Can chatbots exhibit mixed <span class = "fragment highlight-red">attributes?</span></h2>
+</div>
+
+<p style = "position: fixed; bottom: 2em">Rameez Qureshi</p>
+
+<img data-id = "image1" src="media\logos\ADAPT_Logo_CMYK.png" style="position : absolute; bottom : 0; right : 0; width: 150px">
+<img data-id = "image2" src="media\logos\tcd.png" style="position : absolute; bottom : 0; left : 0; width: 150px"> -->
+				<img src="..\media\logos\ADAPT_Logo_CMYK.png"
+					style=" position : auto; top:0 ; right : 2em; width: 150px">
+				<img src="..\media\logos\tcd.png" style=" position : auto; bottom :0 ; left : em; width: 150px">
+				<h2>Human-like Personalities for Humanised Conversations
+				</h2>
+				20 June 2024
+				<h4 style="position: auto;  bottom: 2em">Rameez Qureshi</h4>
+
+
+
+			</section>
+
+			<section data-transition="fade">
+				<section data-transition="fade">
+					<h2>Contents</h1>
+						<ol>
+							<li>Architecture for chatbots with blended personality</li>
+							<li>Evaluation Metrics</li>
+							<ol>
+								<li>Human</li>
+								<li>Automatic</li>
+							</ol>
+							<li>Sci-Chat Workshop at EACL 2024</li>
+							<li>Human-like chatbots without human-like stereotypes (Refine-LM)</li>
+						</ol>
+
+
+				</section>
+			</section>
+			<section>
+				<section>
+					<h2>1.<br>Architecture for Chatbots
+						with Blended Personality
+					</h2>
+				</section>
+				<section>
+					<h3>Architecture</h3>
+					<p>
+						<img src="..\pres\figures\9jun22\simplified_arch.png" style="max-width: 65%; padding: 0;">
+					</p>
+				</section>
+				<section>
+					<h2>Base Model: DialoGPT-Large</h2><br><br>
+
+					<table border="1">
+						<tr>
+							<th>Specification</th>
+							<th>Detail</th>
+						</tr>
+						<tr>
+							<td>Architecture</td>
+							<td>GPT-2</td>
+						</tr>
+						<tr>
+							<td>Parameters</td>
+							<td>774 million</td>
+						</tr>
+						<tr>
+							<td>Layers</td>
+							<td>36 transformer layers</td>
+						</tr>
+						<tr>
+							<td>Attention Heads</td>
+							<td>20 per layer</td>
+						</tr>
+						<tr>
+							<td>Training Data</td>
+							<td>147 million multi-turn dialogues from Reddit (2005-2017)</td>
+						</tr>
+						<tr>
+							<td>Context Length</td>
+							<td>Up to 1024 tokens</td>
+						</tr>
+
+					</table>
+				</section>
+				<section>
+					<h2>Example</h2>
+					<pre style="font-size:50%;">
+<span style="color: white;">User: Persona: i read twenty books a year.</span>
+<span style="color: white;">your persona: i'm a stunt double as my second job.</span>
+<span style="color: white;">your persona: i only eat kosher.</span>
+<span style="color: white;">your persona: i was raised in a single parent household.</span>
+
+<span style="color: white;">User:hello what are doing today ?</span>
+<span style="color: #00FFFF;">Bot_wiki: I'm doing well. I'm reading a book right now.</span>
+<span style="color: #FF6347;">Bot_2: I'm working on my thesis. I'm not sure if I'm going to get it done.</span>
+<span style="color: #ADFF2F;">Bot_5: I'm doing great! How are you doing?</span>
+<span style="color: #00FFFF;">Bot_8: I am doing great. How are you doing?</span>
+<span style="color: #FFD700;">Bot_emp: I'm working on my presentation.</span>
+
+<span style="color: white;">User: i just got done watching a horror movie</span>
+<span style="color: #00FFFF;">Bot_wiki: oh thats cool, what movie was it?</span>
+<span style="color: #FF6347;">Bot_2: oh thats cool, what movie?</span>
+<span style="color: #ADFF2F;">Bot_5: i have never seen a horror movie</span>
+<span style="color: #00FFFF;">Bot_8: oh thats cool</span>
+<span style="color: #FFD700;">Bot_emp: oh wow that sounds like a good movie</span>
+
+<span style="color: white;">User: wow ! i do love a good horror movie . loving this cooler weather</span>
+<span style="color: #00FFFF;">Bot_wiki: I love it too, it's been nice this year.</span>
+<span style="color: #FF6347;">Bot_2: yeah it was nice today</span>
+<span style="color: #ADFF2F;">Bot_5: I love the cold weather too</span>
+<span style="color: #00FFFF;">Bot_8: what movie is it?</span>
+<span style="color: #FFD700;">Bot_emp: I love the cold.</span>
+					</pre>
+				</section>
+			</section>
+			<section>
+				<section>
+					<h2> 2.<br>Evaluation Metrics</h2>
+				</section>
+				<section data-background-color="rgb(255,255,255)">
+					<h3> 2.1<br>Human Evaluation</h3>
+					<img src="/pres/figures/20jun24/portal_arch.png" style="max-width: 100%; padding: 0;">
+
+				</section>
+				<section data-background-iframe="https://qrameez.adaptcentre.ie/" data-background-interactive>
+					<div
+						style="position: fixed; width: 15%; right: 0; top: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.5), 0 5px 25px rgba(0,0,0,0.2); background-color: rgba(251, 1, 1, 0.9); color: #fff; ; font-size: 10px; text-align: center; padding-right: 5;">
+						<h2>Live Demo</h2>
+					</div>
+				</section>
+				<section data-background-color="rgb(255,255,255)">
+					<h3> 2.2<br>Automatic Evaluation</h3>
+				</section>
+				<section style="text-align: left;">
+					<table border="1" style="font-size : 35px;  border: 1px solid white;">
+						<tr>
+							<td>Model</td>
+							<td>BertForSequenceClassification</td>
+						</tr>
+						<tr>
+							<td>Dataset (only responses)</td>
+							<td>Wizard of Wikipedia &amp; Empathetic Dialogues</td>
+						</tr>
+						<tr>
+							<td>Number of examples each</td>
+							<td>64636</td>
+						</tr>
+						<tr> </tr>
+
+						<tr>
+							<td>Test Dataset</td>
+							<td>ConvAI2</td>
+						</tr>
+						<tr>
+							<td>Test Examples</td>
+							<td>7801</td>
+						</tr>
+					</table>
+
+				</section>
+				<section data-background-color="rgb(255,255,255)">
+					<h3>Results</h3>
+					<canvas id="myChart" width="50%" height="25"></canvas>
+
+
+					<script>
+						var ctx = document.getElementById('myChart').getContext('2d');
+						var myChart = new Chart(ctx, {
+							type: 'bar',
+							data: {
+								labels: ['0E-100W', '20E-80W', '50E-50W', '80E-20W', '100E-0W'],
+
+								datasets: [{
+									label: '# Empathetic',
+									data: [5302, 5190, 5703, 6007, 6819],
+									backgroundColor: '#2ab7ca',
+									borderWidth: 1
+								}, {
+									label: '# Informative',
+									data: [2499, 2611, 2098, 1794, 982],
+									backgroundColor: '#fed766',
+									borderWidth: 1
+								}]
+							},
+							// options: {
+							// 	scales: {
+							// 		y: {
+							// 			beginAtZero: true,
+							// 			// ticks: {
+							// 			// 	fontColor: '#000000' // Black text color
+							// 			// },
+							// 			title:{
+							// 				display:true,
+							// 				text:'Number of Responses'
+							// 			}
+							// 		}
+							// 	}
+							// }
+						});
+					</script>
+				</section>
+			</section>
+			</section>
+
+			<section>
+				<section>
+					<h2>3. Sci-Chat Workshop at EACL 2024</h2>
+				</section>
+				<section data-background-image="figures/20jun24/Dialogue_Evaluation.jpeg" data-background-size=""
+					data-background-position="center">
+					<!-- Your slide content here -->
+				</section>
+				<section>
+					<h4>Dialogue Shared Task</h4>
+					<ul>
+						<li>Focus: Simulating intelligent conversations</li>
+						<li>Participants asked to submit automated dialogue agents with the aim of carrying out nuanced
+							conversations over multiple dialogue turns</li>
+						<li>Participating systems will be interactively evaluated in a live human evaluation</li>
+						<li>All data acquired within the context of the shared task will be made public (i.e. model and
+							user interactions), providing an important resource for improving metrics and systems in
+							this research area</li>
+						<li>No obligation for participating systems to be made publicly available</li>
+					</ul>
+				</section>
+
+				<section>
+					<h4>Results</h4>
+					<table style="font-size: medium;">
+						<tr>
+							<th>Model</th>
+							<th>N</th>
+							<th>z</th>
+							<th>Intelligent</th>
+							<th>Interesting</th>
+							<th>Informative</th>
+							<th>Fluent</th>
+							<th>Credible</th>
+							<th>Inconsistent</th>
+							<th>Incoherent</th>
+							<th>Repetitive</th>
+						</tr>
+						<tr>
+							<td>Blenderbot</td>
+							<td>1088</td>
+							<td>0.282</td>
+							<td>0.216</td>
+							<td>0.124</td>
+							<td>-0.203</td>
+							<td>1.764</td>
+							<td>0.321</td>
+							<td>0.334</td>
+							<td>0.317</td>
+							<td>-0.615</td>
+						</tr>
+						<tr>
+							<td>PersonaChatGPT</td>
+							<td>1088</td>
+							<td>0.162</td>
+							<td>0.055</td>
+							<td>-0.005</td>
+							<td>-0.325</td>
+							<td>1.360</td>
+							<td>0.070</td>
+							<td>0.320</td>
+							<td>0.318</td>
+							<td>-0.494</td>
+						</tr>
+						<tr>
+							<td>PersonaChatBART</td>
+							<td>1088</td>
+							<td>0.097</td>
+							<td>-0.125</td>
+							<td>-0.266</td>
+							<td>-0.529</td>
+							<td>1.569</td>
+							<td>0.083</td>
+							<td>0.309</td>
+							<td>0.326</td>
+							<td>-0.589</td>
+						</tr>
+						<tr>
+							<td>Rizwan et al</td>
+							<td>1088</td>
+							<td>0.045</td>
+							<td>-0.108</td>
+							<td>-0.105</td>
+							<td>-0.495</td>
+							<td>1.239</td>
+							<td>0.023</td>
+							<td>0.128</td>
+							<td>0.079</td>
+							<td>-0.399</td>
+						</tr>
+						<tr>
+							<td>Hassan et al</td>
+							<td>1088</td>
+							<td>0.042</td>
+							<td>-0.097</td>
+							<td>-0.084</td>
+							<td>-0.413</td>
+							<td>1.516</td>
+							<td>-0.067</td>
+							<td>-0.140</td>
+							<td>-0.208</td>
+							<td>-0.173</td>
+						</tr>
+						<tr>
+							<td>DialogGPT</td>
+							<td>1088</td>
+							<td>-0.023</td>
+							<td>-0.159</td>
+							<td>-0.103</td>
+							<td>-0.550</td>
+							<td>1.278</td>
+							<td>-0.082</td>
+							<td>-0.085</td>
+							<td>-0.079</td>
+							<td>-0.400</td>
+						</tr>
+						<tr>
+							<td>Debnath et al</td>
+							<td>1088</td>
+							<td>-0.168</td>
+							<td>-0.414</td>
+							<td>-0.335</td>
+							<td>-0.661</td>
+							<td>1.304</td>
+							<td>-0.288</td>
+							<td>0.054</td>
+							<td>-0.221</td>
+							<td>-0.784</td>
+						</tr>
+					</table>
+				</section>
+
+				<section data-background-iframe="https://aclanthology.org/2024.scichat-1.1/"
+					data-background-interactive>
+					<div
+						style="position: absolute; width: 40%; right: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.5), 0 5px 25px rgba(0,0,0,0.2); background-color: rgba(0, 0, 0, 0.9); color: #fff; padding: 20px; font-size: 20px; text-align: left;">
+						<h2>Findings of SCI-Chat Workshop</h2>
+						<p>Co-authored Workshop Findings Paper at EACL'24</p>
+					</div>
+				</section>
+			</section>
+
+			<section>
+				<section>
+					<h2>4. Human-like Chatbots without Human-like Stereotypes</h2>
+				</section>
+				<section>
+					<h3>Problem Statement</h3>
+					<p>
+						<img src="figures/20jun24/chat-gpt.png" style="max-height: 55%; padding: 0; ">
+					</p>
+				</section>
+				<section>
+					<h4 style="text-align: left;">REFINE-LM: Mitigating Language Model Stereotypes via Reinforcement
+						Learning<br>(Under Review at ECAI 24)
+					</h4>
+					<br>
+					<pre style="text-align: left;">
+Rameez Qureshi, ADAPT Centre, T.C.Dublin. Ireland.
+
+Es-Sebbani Naïm, CRIL Univ Artois & CNRS. France.
+
+Luis Galárraga, INRIA/IRISA Rennes. France.
+
+Yvette Graham, ADAPT Centre, T.C.Dublin. Ireland.
+
+Miguel Couceiro, U. Lorraine, CNRS, LORIA & IST, U. Lisboa, INESC-ID. Portugal.
+
+Zied Bouraoui, CRIL - CNRS & Univ Artois. France.
+						
+					</pre>
+				</section>
+				<section data-background-color="white">
+					<h>Proposed Architecture</h3>
+						<p>
+							<img src="figures/20jun24/refine_arch.png" style="max-height: 55%; padding: 0;">
+						</p>
+				</section>
+				<section data-background-color="white">
+					<p>
+						<img src="figures/20jun24/refine_results.png" style="max-width: 75%; padding: 0;">
+					</p>
+				</section>
+				<section data-background-color="white">
+					<h3>Nationality</h3>
+					<p>
+						<img src="figures/20jun24/llm_vs_base_country.png" style="max-height: 75%; padding: 0;">
+					</p>
+				</section>
+				<section data-background-color="white">
+					<h3>Ethnicity</h3>
+					<p>
+						<img src="figures/20jun24/refine_ethnicity.png" style="max-height: 55%; padding: 0;">
+					</p>
+				</section>
+
+				<section data-background-iframe="https://biasinai.github.io/refinelm/" data-background-interactive>
+				</section>
+
+				<section data-background-iframe="https://aclanthology.org/2024.ltedi-1.4/"
+					data-background-interactive>
+					<div
+						style="position: absolute; width: 40%; right: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.5), 0 5px 25px rgba(0,0,0,0.2); background-color: rgba(0, 0, 0, 0.9); color: #fff; padding: 20px; font-size: 20px; text-align: left;">
+						<h2>Another Publication</h2>
+						<p>Co-authored a workshop paper on identifying bias in speech datasets.</p>
+					</div>
+				</section>
+
+			</section>
+
+			<section>
+				<section>
+					<h2>5. Future Plan</h2>
+				</section>
+
+				<section>
+					<ul>
+						<li>
+							Submit the Personality Blending Architecture to ACL Rolling Review August 2024.
+						</li>
+						<li>
+							Subsequently, submitting the Reinforcement Learning based blending architecture to the ACL
+							Rolling Review December 2024.
+						</li>
+						<li>Extending the work on mitigating stereotypical bias on more models with a filter to handle
+							multiple biases at once.</li>
+					</ul>
+				</section>
+			</section>
+			<section>
+				<section data-background-color="#dcedc1">
+					<h2>Thank you!</h2>
+				</section>
+				<section data-background-color="#dcedc1">
+					<h2>Questions?</h2>
+				</section>
+			</section>
+			</section>
+		</div>
+	</div>
+
+	<script src="../dist/reveal.js"></script>
+	<script src="../plugin/notes/notes.js"></script>
+	<script src="../plugin/markdown/markdown.js"></script>
+	<script src="../plugin/highlight/highlight.js"></script>
+	<script src="../plugin/zoom/zoom.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/reveal.js-plugins@latest/chart/plugin.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.2.0/chart.min.js"></script>
+	<script>
+		// More info about initialization & config:
+		// - https://revealjs.com/initialization/
+		// - https://revealjs.com/config/
+		Reveal.initialize({
+			controls: true,
+			progress: true,
+			center: true,
+			hash: true,
+			slideNumber: 'h.v',
+			chart: {
+				defaults: {
+					// responsive: true,
+					// maintainAspectRatio: true,
+					color: 'black', // color of labels
+					// scale: {
+
+					// 	// beginAtZero: true,
+					// 	// ticks: { display: true },
+					// 	// grid: { display: true, color: "lightgray", borderColor: "lightgray", drawOnChartArea: false }
+					// 	// grid: { color: "lightgray" , drawOnChartArea:true},
+
+
+					// 	// color of grid lines
+					// },
+
+				},
+				line: { borderColor: ["rgba(20,220,220,.8)", "rgba(220,120,120,.8)", "rgba(20,120,220,.8)"], "borderDash": [[5, 10], [0, 0]] },
+				bar: { backgroundColor: ["#fe4a49", "#2ab7ca", "#fed766 ", "#dec3c3", "#009688"] },
+				pie: { backgroundColor: [["rgba(0,0,0,.8)", "rgba(220,20,20,.8)", "rgba(20,220,20,.8)", "rgba(220,220,20,.8)", "rgba(20,20,220,.8)"]] },
+				radar: { borderColor: ["rgba(20,220,220,.8)", "rgba(220,120,120,.8)", "rgba(20,120,220,.8)"] },
+			},
+			// width: "70%",
+			// height: "100%",
+			// Transition style
+			transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+			// Transition speed
+			// transitionSpeed: 'default',
+			// backgroundTransition: 'slide', // default/fast/slow
+
+			//transition: "none",
+
+			// Learn about plugins: https://revealjs.com/plugins/
+
+			plugins: [RevealMarkdown, RevealHighlight, RevealNotes, RevealZoom, RevealChart]
+		});
+	</script>
+</body>
+
+</html>
